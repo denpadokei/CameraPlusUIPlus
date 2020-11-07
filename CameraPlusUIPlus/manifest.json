@@ -1,0 +1,16 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "CameraPlusUIPlus",
+  "name": "CameraPlusUIPlus",
+  "author": "",
+  "version": "0.0.1",
+  "description": "",
+  "gameVersion": "1.12.2",
+  "dependsOn": {
+    "BSIPA": "^4.1.3",
+    "BeatSaberMarkupLangurge": "^1.4.1",
+    "CameraPlus": "^4.4.2",
+    "SiraUtil": "^2.0.0"
+  },
+  "features": []
+}
