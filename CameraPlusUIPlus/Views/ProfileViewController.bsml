@@ -1,0 +1,21 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+  <vertical pad='5'>
+    <vertical pad-bottom='5'>
+      <text text='Current Profile'></text>
+      <text text='Profile name'></text>
+      <horizontal horizontal-fit='PreferredSize'>
+        <button text="&lt;"></button>
+        <button text="&gt;"></button>
+      </horizontal>
+    </vertical>
+    <horizontal horizontal-fit='PreferredSize' pad-top='5' pad-bottom='5'>
+      <button text="Save"></button>
+      <button text="Delete"></button>
+    </horizontal>
+    <vertical pad-top="5">
+      <button text="LoadSelected"></button>
+      <button text="ToSceneChange On"></button>
+      <button text="Close"></button>
+    </vertical>
+  </vertical>
+</bg>

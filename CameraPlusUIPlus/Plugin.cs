@@ -37,6 +37,7 @@ namespace CameraPlusUIPlus
             Instance = this;
             Log = logger;
             Log.Info("CameraPlusUIPlus initialized.");
+            _harmony = new Harmony(HARMONY_ID);
             zenjector.OnMenu<CameraUIPlusInstaller>();
         }
 
@@ -56,12 +57,17 @@ namespace CameraPlusUIPlus
         public void OnApplicationStart()
         {
             Log.Debug("OnApplicationStart");
-            _harmony.PatchAll(Assembly.GetExecutingAssembly());
+            Setup();
         }
 
         static void Setup()
         {
-            _harmony = new Harmony(HARMONY_ID);
+            try {
+                _harmony.PatchAll(Assembly.GetExecutingAssembly());
+            }
+            catch (Exception e) {
+                Logger.Error(e);
+            }
         }
 
         [OnExit]

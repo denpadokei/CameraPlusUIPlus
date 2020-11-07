@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace CameraPlusUIPlus.Modules
@@ -34,6 +35,7 @@ namespace CameraPlusUIPlus.Modules
             // For this particular MonoBehaviour, we only want one instance to exist at any time, so store a reference to it in a static property
             //   and destroy any that are created while one already exists.
             Plugin.Log?.Debug($"{name}: Awake()");
+            this.Screens = new FloatingScreen[0];
         }
         
         private void OnDestroy()
@@ -58,20 +60,33 @@ namespace CameraPlusUIPlus.Modules
         void CreateFlowtingScreens(ConcurrentDictionary<string, CameraPlusInstance> dic)
         {
             Logger.Debug("Start create screen");
-            var screens = new List<FloatingScreen>();
+            try {
+                var screens = new List<FloatingScreen>();
 
-            foreach (var screen in this.Screens) {
-                Destroy(screen);
+                foreach (var screen in this.Screens) {
+                    Destroy(screen);
+                }
+
+                foreach (var item in dic.Where(x => x.Value.Instance.Config.showThirdPersonCamera)) {
+                    var screen = FloatingScreen.CreateFloatingScreen(new Vector2(80f, 100f), false, new Vector3(0.9f, 0, 0), Quaternion.Euler(0f, 180f, 0f));
+                    var mainView = BeatSaberUI.CreateViewController<CameraFlowtingViewController>();
+                    mainView.SetCurrentInstance(item.Key, item.Value);
+                    mainView.ProfileSeverClickEnvet += this.MainView_ProfileSeverClickEnvet;
+                    screen.SetRootViewController(mainView, HMUI.ViewController.AnimationType.None);
+                    screen.gameObject.transform.SetParent(item.Value.Instance.gameObject.transform);
+                    screens.Add(screen);
+                }
+
+                this.Screens = screens.AsEnumerable();
             }
-
-            foreach (var item in dic.Where(x => x.Value.Instance.Config.showThirdPersonCamera).Select(x => x.Value.Instance)) {
-                var screen = FloatingScreen.CreateFloatingScreen(new Vector2(20f, 30f), false, new Vector3(25f, 0, 0), Quaternion.Euler(0f, 0f, 0f));
-                screen.SetRootViewController(BeatSaberUI.CreateViewController<CameraFlowtingViewController>(), HMUI.ViewController.AnimationType.None);
-                screen.gameObject.transform.SetParent(item.gameObject.transform);
-                screens.Add(screen);
+            catch (Exception e) {
+                Logger.Error(e);
             }
+        }
 
-            this.Screens = screens.AsEnumerable();
+        private void MainView_ProfileSeverClickEnvet(CameraFlowtingViewController arg1, KeyValuePair<string, CameraPlusInstance> arg2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

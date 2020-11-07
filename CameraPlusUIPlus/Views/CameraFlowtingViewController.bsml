@@ -1,3 +1,11 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-  <text text='MenuText'></text>
+  <vertical horizontal-fit='Unconstrained' vertical-fit='Unconstrained' pad='5'>
+    <text text='MenuText' overflow-mode='Overflow'></text>
+    <checkbox text='TranceParent wall'></checkbox>
+    <checkbox text='Hide Avater'></checkbox>
+    <checkbox text='360 Third Person'></checkbox>
+    <checkbox text='Forced display Debri'></checkbox>
+    <checkbox text='Script Sync unity'></checkbox>
+    <button text='profile-sarver' on-click='profile-saver-click'></button>
+  </vertical>
 </bg>

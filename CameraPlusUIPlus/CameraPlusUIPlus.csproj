@@ -130,6 +130,7 @@
     <Compile Include="Modules\CameraPlusUIPlusController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\CameraFlowtingViewController.cs" />
+    <Compile Include="Views\ProfileViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
@@ -140,6 +141,9 @@
     <None Include="CameraPlusUIPlus.csproj.user" Condition="Exists('CameraPlusUIPlus.csproj.user')" />
     <EmbeddedResource Include="Views\CameraFlowtingViewController.bsml">
       <DependentUpon>CameraFlowtingViewController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProfileViewController.bsml">
+      <DependentUpon>ProfileViewController.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
