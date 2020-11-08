@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.FloatingScreen;
 using CameraPlus;
 using CameraPlusUIPlus.Patches;
 using CameraPlusUIPlus.Views;
+using IPA.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -23,8 +24,10 @@ namespace CameraPlusUIPlus.Modules
     /// </summary>
     public class CameraPlusUIPlusController : MonoBehaviour, IInitializable
     {
-        public IEnumerable<FloatingScreen> Screens { get; private set; }
+        public ConcurrentDictionary<string, FloatingScreen> Screens { get; } = new ConcurrentDictionary<string, FloatingScreen>();
 
+        [Inject]
+        IFactory<CameraFlowtingViewController> factory;
         // These methods are automatically called by Unity, you should remove any you aren't using.
         #region Monobehaviour Messages
         /// <summary>
@@ -35,12 +38,13 @@ namespace CameraPlusUIPlus.Modules
             // For this particular MonoBehaviour, we only want one instance to exist at any time, so store a reference to it in a static property
             //   and destroy any that are created while one already exists.
             Plugin.Log?.Debug($"{name}: Awake()");
-            this.Screens = new FloatingScreen[0];
         }
         
         private void OnDestroy()
         {
             Plugin.Log?.Debug($"{name}: OnDestroy()");
+            ReloadCameraOverride.ReloadCameraEvent -= this.ReloadCameraOverride_ReloadCameraEvent;
+            this.DeleteAllScreen();
         }
         #endregion
 
@@ -57,36 +61,37 @@ namespace CameraPlusUIPlus.Modules
         }
         #endregion
 
+        void DeleteAllScreen()
+        {
+            foreach (var screen in this.Screens.Values) {
+                screen.gameObject.SetActive(false);
+                Destroy(screen.gameObject);
+            }
+
+            this.Screens.Clear();
+        }
+
         void CreateFlowtingScreens(ConcurrentDictionary<string, CameraPlusInstance> dic)
         {
             Logger.Debug("Start create screen");
             try {
-                var screens = new List<FloatingScreen>();
-
-                foreach (var screen in this.Screens) {
-                    Destroy(screen);
-                }
-
-                foreach (var item in dic.Where(x => x.Value.Instance.Config.showThirdPersonCamera)) {
-                    var screen = FloatingScreen.CreateFloatingScreen(new Vector2(80f, 100f), false, new Vector3(0.9f, 0, 0), Quaternion.Euler(0f, 180f, 0f));
-                    var mainView = BeatSaberUI.CreateViewController<CameraFlowtingViewController>();
+                this.DeleteAllScreen();
+                foreach (var item in dic) {
+                    var cameraCube = item.Value.Instance.GetField<GameObject, CameraPlusBehaviour>("_cameraCubeGO");
+                    var cameraPosision = cameraCube.transform.position;
+                    var cameraRotation = cameraCube.transform.rotation;
+                    Logger.Debug($"{cameraPosision}");
+                    var screen = FloatingScreen.CreateFloatingScreen(new Vector2(80f, 100f), false, new Vector3(cameraPosision.x + 0.9f, cameraPosision.y, cameraPosision.z), new Quaternion(cameraRotation.x, cameraRotation.y - 180f, -cameraRotation.z, cameraRotation.w));
+                    var mainView = this.factory.Create();
                     mainView.SetCurrentInstance(item.Key, item.Value);
-                    mainView.ProfileSeverClickEnvet += this.MainView_ProfileSeverClickEnvet;
                     screen.SetRootViewController(mainView, HMUI.ViewController.AnimationType.None);
-                    screen.gameObject.transform.SetParent(item.Value.Instance.gameObject.transform);
-                    screens.Add(screen);
+                    screen.gameObject.transform.SetParent(cameraCube.transform);
+                    this.Screens.AddOrUpdate(item.Key, screen, (k, v) => screen);
                 }
-
-                this.Screens = screens.AsEnumerable();
             }
             catch (Exception e) {
                 Logger.Error(e);
             }
-        }
-
-        private void MainView_ProfileSeverClickEnvet(CameraFlowtingViewController arg1, KeyValuePair<string, CameraPlusInstance> arg2)
-        {
-            throw new NotImplementedException();
         }
     }
 }

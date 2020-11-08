@@ -7,6 +7,11 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using CameraPlus;
+using HMUI;
+using IPA.Utilities;
+using UnityEngine;
+using VRUIControls;
+using Zenject;
 
 namespace CameraPlusUIPlus.Views
 {
@@ -20,15 +25,62 @@ namespace CameraPlusUIPlus.Views
 
         KeyValuePair<string, CameraPlusInstance> _currentInstance;
 
+        [UIAction("#post-parse")]
+        void PostPaese()
+        {
+            
+        }
+
+        [UIComponent("main-modal")]
+        ModalView _mainModal;
+        [UIComponent("profile-modal")]
+        ModalView _profileModal;
+
+        [UIAction("open-main-modal")]
+        void OpenMain()
+        {
+            try {
+                Logger.Debug($"modal is null? : {_mainModal == null}");
+                this._mainModal.transform.SetParent(this.rectTransform);
+                Logger.Debug($"parent is null? : {this._mainModal.transform.parent == null}");
+                
+                this._mainModal.Show(true);
+            }
+            catch (Exception e) {
+                Logger.Error(e);
+            }
+        }
+
+
+        [UIAction("open-profile-modal")]
+        void OpenProfile()
+        {
+            try {
+                Logger.Debug($"modal is null? : {_profileModal == null}");
+                this._profileModal.transform.SetParent(this.rectTransform);
+                this._profileModal.Show(true);
+            }
+            catch (Exception e) {
+                Logger.Error(e);
+            }
+        }
+
+
         public void SetCurrentInstance(string fileName, CameraPlusInstance instance)
         {
             this._currentInstance = new KeyValuePair<string, CameraPlusInstance>(fileName, instance);
+            Logger.Debug(this._currentInstance.Key);
         }
 
-        [UIAction("profile-saver-click")]
-        void ProfileSaverClock()
+        public class Factory : IFactory<CameraFlowtingViewController>
         {
-            this.ProfileSeverClickEnvet?.Invoke(this, this._currentInstance);
+            [Inject]
+            DiContainer Container;
+
+            public CameraFlowtingViewController Create()
+            {
+                return BeatSaberUI.CreateViewController<CameraFlowtingViewController>();
+            }
         }
     }
 }

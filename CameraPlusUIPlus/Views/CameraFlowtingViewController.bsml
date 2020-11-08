@@ -1,11 +1,31 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-  <vertical horizontal-fit='Unconstrained' vertical-fit='Unconstrained' pad='5'>
-    <text text='MenuText' overflow-mode='Overflow'></text>
-    <checkbox text='TranceParent wall'></checkbox>
-    <checkbox text='Hide Avater'></checkbox>
-    <checkbox text='360 Third Person'></checkbox>
-    <checkbox text='Forced display Debri'></checkbox>
-    <checkbox text='Script Sync unity'></checkbox>
-    <button text='profile-sarver' on-click='profile-saver-click'></button>
+  <vertical vertical-fit='MinSize'>
+    <scroll-view id ='menu' min-height='40' min-width='60'>
+      <vertical vertical-fit='PreferredSize'>
+        <vertical preferred-width='40 ' pad-bottom='5'>
+          <checkbox text='TranceParent wall'></checkbox>
+          <checkbox text='Hide Avater'></checkbox>
+          <checkbox text='360 Third Person'></checkbox>
+          <checkbox text='Forced display Debri'></checkbox>
+          <checkbox text='Script Sync unity'></checkbox>
+        </vertical>
+        <vertical pad-bottom='5'>
+          <text text='Current Profile'></text>
+          <text text='Profile name'></text>
+          <horizontal>
+            <button text="&lt;" preferred-width="20"></button>
+            <button text="&gt;" preferred-width="20"></button>
+          </horizontal>
+        </vertical>
+        <horizontal horizontal-fit="Unconstrained" pad-top='5' pad-bottom='5'>
+          <button text="Save"></button>
+          <button text="Delete"></button>
+        </horizontal>
+        <vertical pad-top="5">
+          <button text="LoadSelected"></button>
+          <button text="ToSceneChange On"></button>
+        </vertical>
+      </vertical>
+    </scroll-view>
   </vertical>
 </bg>
