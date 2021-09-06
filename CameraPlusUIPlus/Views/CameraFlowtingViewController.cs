@@ -7,6 +7,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using CameraPlus;
+using CameraPlus.Behaviours;
 using HMUI;
 using IPA.Utilities;
 using UnityEngine;
@@ -21,9 +22,9 @@ namespace CameraPlusUIPlus.Views
         // For this method of setting the ResourceName, this class must be the first class in the file.
         public string ResourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
-        public event Action<CameraFlowtingViewController, KeyValuePair<string, CameraPlusInstance>> ProfileSeverClickEnvet;
+        public event Action<CameraFlowtingViewController, KeyValuePair<string, CameraPlusBehaviour>> ProfileSeverClickEnvet;
 
-        KeyValuePair<string, CameraPlusInstance> _currentInstance;
+        KeyValuePair<string, CameraPlusBehaviour> _currentInstance;
 
         [UIAction("#post-parse")]
         void PostPaese()
@@ -66,9 +67,9 @@ namespace CameraPlusUIPlus.Views
         }
 
 
-        public void SetCurrentInstance(string fileName, CameraPlusInstance instance)
+        public void SetCurrentInstance(string fileName, CameraPlusBehaviour instance)
         {
-            this._currentInstance = new KeyValuePair<string, CameraPlusInstance>(fileName, instance);
+            this._currentInstance = new KeyValuePair<string, CameraPlusBehaviour>(fileName, instance);
             Logger.Debug(this._currentInstance.Key);
         }
 

@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.FloatingScreen;
 using CameraPlus;
+using CameraPlus.Behaviours;
 using CameraPlusUIPlus.Patches;
 using CameraPlusUIPlus.Views;
 using IPA.Utilities;
@@ -10,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -43,7 +45,7 @@ namespace CameraPlusUIPlus.Modules
         private void OnDestroy()
         {
             Plugin.Log?.Debug($"{name}: OnDestroy()");
-            ReloadCameraOverride.ReloadCameraEvent -= this.ReloadCameraOverride_ReloadCameraEvent;
+            ReloadCameraOverride.AwakedCamera -= this.ReloadCameraOverride_ReloadCameraEvent;
             this.DeleteAllScreen();
         }
         #endregion
@@ -51,11 +53,11 @@ namespace CameraPlusUIPlus.Modules
         #region Zenject method
         public void Initialize()
         {
-            ReloadCameraOverride.ReloadCameraEvent -= this.ReloadCameraOverride_ReloadCameraEvent;
-            ReloadCameraOverride.ReloadCameraEvent += this.ReloadCameraOverride_ReloadCameraEvent;
+            ReloadCameraOverride.AwakedCamera -= this.ReloadCameraOverride_ReloadCameraEvent;
+            ReloadCameraOverride.AwakedCamera += this.ReloadCameraOverride_ReloadCameraEvent;
         }
 
-        private void ReloadCameraOverride_ReloadCameraEvent(ConcurrentDictionary<string, CameraPlusInstance> obj)
+        private void ReloadCameraOverride_ReloadCameraEvent(GameObject obj)
         {
             this.CreateFlowtingScreens(obj);
         }
@@ -71,23 +73,20 @@ namespace CameraPlusUIPlus.Modules
             this.Screens.Clear();
         }
 
-        void CreateFlowtingScreens(ConcurrentDictionary<string, CameraPlusInstance> dic)
+        void CreateFlowtingScreens(GameObject obj)
         {
             Logger.Debug("Start create screen");
             try {
-                this.DeleteAllScreen();
-                foreach (var item in dic) {
-                    var cameraCube = item.Value.Instance.GetField<GameObject, CameraPlusBehaviour>("_cameraCubeGO");
-                    var cameraPosision = cameraCube.transform.position;
-                    var cameraRotation = cameraCube.transform.rotation;
-                    Logger.Debug($"{cameraPosision}");
-                    var screen = FloatingScreen.CreateFloatingScreen(new Vector2(80f, 100f), false, new Vector3(cameraPosision.x + 0.9f, cameraPosision.y, cameraPosision.z), new Quaternion(cameraRotation.x, cameraRotation.y - 180f, -cameraRotation.z, cameraRotation.w));
-                    var mainView = this.factory.Create();
-                    mainView.SetCurrentInstance(item.Key, item.Value);
-                    screen.SetRootViewController(mainView, HMUI.ViewController.AnimationType.None);
-                    screen.gameObject.transform.SetParent(cameraCube.transform);
-                    this.Screens.AddOrUpdate(item.Key, screen, (k, v) => screen);
-                }
+                var cameraCube = obj;
+                var cameraPosision = cameraCube.transform.position;
+                var cameraRotation = cameraCube.transform.rotation;
+                Logger.Debug($"{cameraPosision}");
+                var screen = FloatingScreen.CreateFloatingScreen(new Vector2(80f, 100f), false, new Vector3(cameraPosision.x + 0.9f, cameraPosision.y, cameraPosision.z), new Quaternion(cameraRotation.x, cameraRotation.y - 180f, -cameraRotation.z, cameraRotation.w));
+                var mainView = this.factory.Create();
+                //mainView.SetCurrentInstance(item.Key, item.Value);
+                screen.SetRootViewController(mainView, HMUI.ViewController.AnimationType.None);
+                screen.gameObject.transform.SetParent(cameraCube.transform);
+                //this.Screens.AddOrUpdate(item.Key, screen, (k, v) => screen);
             }
             catch (Exception e) {
                 Logger.Error(e);

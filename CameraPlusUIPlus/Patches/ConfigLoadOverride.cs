@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace CameraPlusUIPlus.Patches
 {
-    [HarmonyLib.HarmonyPatch(typeof(CameraPlus.Config), nameof(CameraPlus.Config.Load))]
+    [HarmonyLib.HarmonyPatch(typeof(CameraPlus.Configuration.CameraConfig), nameof(CameraPlus.Configuration.CameraConfig.Load))]
     public class ConfigLoadOverride
     {
-        public static event Action ConfigLoaded;
+        public static event Action<CameraPlus.Configuration.CameraConfig> ConfigLoaded;
 
-        internal static void Postfix()
+        internal static void Postfix(CameraPlus.Configuration.CameraConfig __instance)
         {
-            ConfigLoaded?.Invoke();
+            ConfigLoaded?.Invoke(__instance);
         }
     }
 }

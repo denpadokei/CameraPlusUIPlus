@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace CameraPlusUIPlus.Patches
 {
-    [HarmonyLib.HarmonyPatch(typeof(CameraPlus.Config), nameof(CameraPlus.Config.Save))]
+    [HarmonyLib.HarmonyPatch(typeof(CameraPlus.Configuration.CameraConfig), nameof(CameraPlus.Configuration.CameraConfig.Save))]
     public class ConfigSaveOverride
     {
-        public static event Action ConfigSaved;
+        public static event Action<CameraPlus.Configuration.CameraConfig> ConfigSaved;
 
-        internal static void Postfix()
+        internal static void Postfix(CameraPlus.Configuration.CameraConfig __instance)
         {
-            ConfigSaved?.Invoke();
+            // 保存したことはわかるがどのコンフィグなのかは不明なので今のところ使えない。
+            ConfigSaved?.Invoke(__instance);
         }
     }
 }

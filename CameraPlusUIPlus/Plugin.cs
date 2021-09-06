@@ -63,6 +63,8 @@ namespace CameraPlusUIPlus
         static void Setup()
         {
             try {
+                Log.Debug(typeof(Plugin).AssemblyQualifiedName);
+
                 _harmony.PatchAll(Assembly.GetExecutingAssembly());
             }
             catch (Exception e) {
