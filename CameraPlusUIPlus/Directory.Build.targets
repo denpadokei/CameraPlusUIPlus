@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This file contains the build tasks and targets for verifying the manifest, zipping Release builds,
      and copying the plugin to to your Beat Saber folder. Only edit this if you know what you are doing. -->
 <Project>
@@ -20,7 +20,7 @@
   <!--Runs a build task to get info about the project used by later targets.-->
   <Target Name="GetProjectInfo" AfterTargets="CheckBSMTInstalled" DependsOnTargets="CheckBSMTInstalled" Condition="'$(BSMTTaskAssembly)' != ''">
     <Message Text="Using AssemblyVersion defined in project instead of 'Properties\AssemblyInfo.cs'" Importance="high" Condition="'$(AssemblyVersion)' != ''" />
-    <GetManifestInfo KnownAssemblyVersion="$(AssemblyVersion)" ErrorOnMismatch="$(ErrorOnMismatchedVersions)">
+    <GetManifestInfo ManifestPath="$(ProjectDir)manifest.json" FailOnError="$(ErrorOnMismatchedVersions)">
       <Output TaskParameter="PluginVersion" PropertyName="PluginVersion" />
       <Output TaskParameter="GameVersion" PropertyName="GameVersion" />
       <!--<Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />-->
