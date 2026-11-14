@@ -92,8 +92,7 @@ jobs:
             -p:BeatSaberDir="$env:BeatSaberDir" `
             -p:GameDirectory="$env:BeatSaberDir" `
             -p:LocalRefsDir="$env:BeatSaberDir" `
-            -p:DisableCopyToPlugins=true `
-            -p:BSMTTaskAssembly=
+            -p:DisableCopyToPlugins=true
       - name: Package release zip
         id: package
         shell: pwsh
