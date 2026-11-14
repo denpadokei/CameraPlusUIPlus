@@ -1,6 +1,5 @@
 # CameraPlusUIPlus
 
-[![Build and Release](https://github.com/denpadokei/CameraPlusUIPlus/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/denpadokei/CameraPlusUIPlus/actions/workflows/build-and-release.yml)
 
 CameraPlus のカメラプレビューに、カメラへ追従するフローティングメニューを追加する MOD です。CameraPlus のカメラ初期化を Harmony でフックして、BSML で作った画面をカメラの子オブジェクトとして配置します。
 
@@ -39,7 +38,8 @@ dotnet build .\CameraPlusUIPlus\CameraPlusUIPlus.csproj -c Release
 
 `BeatSaberDir` (または `GameDirectory`) に Beat Saber のインストール先を設定すると、ゲームの参照アセンブリを解決できます。
 
-GitHub Actions の `build-and-release.yml` が push ごとにビルドし、`X.X.X` 形式のタグを push するとリリースを作成します。
+
+> GitHub Actions によるビルドは未設定です。依存する CameraPlus 6.0 が BeatMods で配布されておらず、CI で参照アセンブリを解決できないため。
 
 ## ライセンス
 
